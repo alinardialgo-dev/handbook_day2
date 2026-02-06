@@ -22,7 +22,7 @@ const PitchAssistant: React.FC = () => {
     <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden mt-8 max-w-4xl mx-auto">
       <div className="bg-slate-900 p-4 flex items-center gap-3">
         <Sparkles className="text-orange-400 w-5 h-5" />
-        <h3 className="text-white font-bold">Latihan Simulasi - AI Simulator</h3>
+        <h3 className="text-white font-bold">Pitch Helper - AI Simulator</h3>
       </div>
       
       <div className="p-6">
