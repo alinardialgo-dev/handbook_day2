@@ -67,7 +67,7 @@ const App: React.FC = () => {
               }`}
             >
               <Presentation className="w-4 h-4" />
-              <span className="hidden md:inline">{showPitchAssistant ? 'Lihat Slide' : 'Pitch Simulator'}</span>
+              <span className="hidden md:inline">{showPitchAssistant ? 'Lihat Slide' : 'Simulator Praktik'}</span>
             </button>
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
