@@ -1,5 +1,4 @@
-
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 
 const PITCH_SYSTEM_INSTRUCTION = `
 You are a Learning Designer and Sales Enablement Specialist for Algonova. 
@@ -13,17 +12,20 @@ When the user enters a "Parent Concern" or a "Draft Pitch", you should:
 Keep responses concise and in Bahasa Indonesia. Use a persuasive but professional tone.
 `;
 
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+if (!apiKey) {
+  console.error("KRITIS: VITE_GEMINI_API_KEY tidak ditemukan.");
+}
+
 export const getPitchAdvice = async (input: string) => {
   try {
-    // Memastikan process.env tersedia di browser untuk mencegah crash total
-    const apiKey = typeof process !== 'undefined' ? process.env.API_KEY : null;
-
     if (!apiKey) {
-      console.error("KRITIS: API_KEY tidak ditemukan di environment variables.");
-      return "Konfigurasi API Key belum terpasang di hosting. Silakan atur 'API_KEY' di Environment Variables Netlify Anda.";
+      return "API Key belum dikonfigurasi di Cloudflare Pages.";
     }
 
-    const ai = new GoogleGenAI({ apiKey: apiKey });
+    const ai = new GoogleGenAI({ apiKey });
+
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: input,
@@ -33,14 +35,15 @@ export const getPitchAdvice = async (input: string) => {
         topP: 0.9,
       },
     });
+
     return response.text;
   } catch (error: any) {
-    console.error("Gemini API Error Detail:", error);
-    
-    if (error?.message?.includes('API key not valid')) {
-      return "Kesalahan: API Key yang Anda masukkan di hosting tidak valid.";
+    console.error("Gemini API Error:", error);
+
+    if (error?.message?.includes("API key not valid")) {
+      return "API Key tidak valid. Periksa kembali key di Cloudflare.";
     }
-    
-    return "Maaf, sistem sedang sibuk atau terjadi masalah koneksi. Pastikan API Key diatur dengan benar di dashboard Netlify.";
+
+    return "Terjadi kesalahan saat menghubungi Gemini API.";
   }
 };
